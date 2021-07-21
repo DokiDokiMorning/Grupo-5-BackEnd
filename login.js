@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var express = require('express');
-var session = require('express-session');
+var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 
@@ -24,7 +24,7 @@ Blocker.prototype.middleware = function() {
   var self = this;
   return function(req, res, next) {
     if (self.isBlocked())
-      return res.sendStatus(503);
+      return res.sendStatus(403);
     next();
   }
 };
@@ -52,7 +52,7 @@ Blocker2.prototype.middleware = function() {
   var self = this;
   return function(req, res, next) {
     if (self.isBlocked())
-      return res.sendStatus(503);
+      return res.sendStatus(403);
     next();
   }
 };
