@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var express = require('express');
-var session = require('cookie-session');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 
@@ -78,11 +78,23 @@ var connection = mysql.createPool({
   database : 'heroku_f2c1270e61b8075'
 });
 var app = express();
+app.set('trust proxy', 1);
 app.use(session({
+  cookie:{
+    secure: true,
+    maxAge:60000
+       },
+  store: new RedisStore(),
   secret: 'secret',
-  resave: true,
+  resave: false,
   saveUninitialized: true
 }));
+app.use(function(req,res,next){
+if(!req.session){
+    return next(new Error('Oh no')) //handle error
+}
+next() //otherwise continue
+});
 var usertype;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
