@@ -1,7 +1,10 @@
 var mysql = require('mysql');
 var express = require('express');
+var redis   = require('redis');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var RedisStore = require('connect-redis')(session);
+var client  = redis.createClient();
 var path = require('path');
 
 var Blocker = function() {
@@ -84,7 +87,7 @@ app.use(session({
     secure: true,
     maxAge:60000
        },
-  store: new RedisStore(),
+  store: new RedisStore(client),
   secret: 'secret',
   resave: false,
   saveUninitialized: true
