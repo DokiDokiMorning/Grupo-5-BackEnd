@@ -1,10 +1,7 @@
 var mysql = require('mysql');
 var express = require('express');
-var redis   = require('redis');
-var session = require('express-session');
+var session = require('cookie-session');
 var bodyParser = require('body-parser');
-var RedisStore = require('connect-redis')(session);
-var client  = redis.createClient();
 var path = require('path');
 
 var Blocker = function() {
@@ -81,23 +78,11 @@ var connection = mysql.createPool({
   database : 'heroku_f2c1270e61b8075'
 });
 var app = express();
-app.set('trust proxy', 1);
 app.use(session({
-  cookie:{
-    secure: true,
-    maxAge:60000
-       },
-  store: new RedisStore(client),
   secret: 'secret',
-  resave: false,
+  resave: true,
   saveUninitialized: true
 }));
-app.use(function(req,res,next){
-if(!req.session){
-    return next(new Error('Oh no')) //handle error
-}
-next() //otherwise continue
-});
 var usertype;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
@@ -168,13 +153,15 @@ app.get('/logout', function(request, response, next) {
     // delete session object
     blocker.enableBlock();
     blocker2.enableBlock();
-    request.session.destroy(function (err) {
+    /*request.session.destroy(function (err) {
       if (err) {
         return next(err);
       } else {
         return response.redirect('/');
       }
-    });
+    });*/
+    request.session = null;
+    response.redirect('/');
   }
 });
 app.post('/upload', function(request, response) {
