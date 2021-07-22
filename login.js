@@ -189,7 +189,6 @@ app.post('/uploadeva', function(request, response) {
   var nuevaeva={
           "id_Curso":idprovisional,
           "link":request.body.linkeva,
-          "Descripcion":request.body.classdescription,
           "nro_eva":request.body.nroeva
         }
         connection.query('INSERT INTO clases SET ?',nuevaeva, function (error, results, fields) {
