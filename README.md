@@ -1,2 +1,2 @@
 # Grupo-5-BackEnd
-Creado con el propósito del deploy del back end.
+Repositorio creado con el propósito del deploy del back end.
