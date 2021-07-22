@@ -184,6 +184,25 @@ app.post('/upload', function(request, response) {
             }
         });
 });
+app.post('/uploadeva', function(request, response) {
+  let idprovisional=5;
+  var nuevaeva={
+          "id_Curso":idprovisional,
+          "link":request.body.linkeva,
+          "Descripcion":request.body.classdescription,
+          "nro_eva":request.body.nroeva
+        }
+        connection.query('INSERT INTO clases SET ?',nuevaeva, function (error, results, fields) {
+          if (error) {
+            response.send({
+              "code":400,
+              "failed":"error ocurred"
+            })
+          } else {
+            response.redirect('/Profesor');
+            }
+        });
+});
 app.post('/auth', function(request, response) {
   var correo = request.body.correo;
   var password = crypto.pbkdf2Sync(request.body.password, salt,  
