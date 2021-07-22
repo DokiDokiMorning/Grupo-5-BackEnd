@@ -191,7 +191,7 @@ app.post('/uploadeva', function(request, response) {
           "link":request.body.linkeva,
           "nro_eva":request.body.nroeva
         }
-        connection.query('INSERT INTO clases SET ?',nuevaeva, function (error, results, fields) {
+        connection.query('INSERT INTO evaluaciones SET ?',nuevaeva, function (error, results, fields) {
           if (error) {
             response.send({
               "code":400,
